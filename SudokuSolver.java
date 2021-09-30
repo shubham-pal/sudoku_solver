@@ -1,5 +1,4 @@
 import java.io.*;
-import java.util.*;
 
 public class SudokuSolver {
   private char[][] board; // sudoku board
@@ -24,30 +23,53 @@ public class SudokuSolver {
     }
   }
 
-  public boolean solve() {
-    for (int i = 0; i < board.length; i++) {
-      for (int j = 0; j < board[0].length; j++) {
-        if (board[i][j] == '.') {
-          for (char c = '1'; c <= '9'; c++) {// trial. Try 1 through 9
-            if (isValid(i, j, c)) {
-              board[i][j] = c; // Put c for this cell
-
-              if (solve())
-                return true; // If it's the solution return true
-              else
-                board[i][j] = '.'; // Otherwise go back
-            }
-          }
-
-          return false;
-        }
-      }
-    }
-
-    return true;
+  public void solve() {
+    solver(0, 0);
   }
 
-  private boolean isValid(int row, int col, char c) {
+  private boolean solver(int row, int col) {
+    // If the col is 9, that means you've filled out a whole row. Start the search
+    // on the next row by resetting column and incrementing the row by 1
+    if (col == boardSize) {
+      col = 0;
+      row += 1;
+    }
+    // If we've reached 9, that means we didn't run into any errors with our
+    // blocks in the previous rows, so we have a valid solution
+    if (row == boardSize) {
+      return true;
+    }
+    // If this piece already has a value, call for next
+    if (board[row][col] != '.')
+      return solver(row, col + 1);
+
+    // We want to try every number for this block
+    for (char num = '1'; num <= '9'; num++) {
+      // check for constraints, go ahead only if constraints are valid
+      if (checkConstraints(row, col, num)) {
+        // Set the value of the current block to the valid num
+        board[row][col] = num;
+
+        // call for next
+        boolean solved = solver(row, col + 1);
+        // The only way we can trigger a true is if we got to the end, so if it's true
+        // that means we have a solved board so you just keep returning
+        if (solved)
+          return true;
+        // If our board isn't solved, backtrack and try the next number
+        else
+          board[row][col] = '.';
+      }
+    }
+    // we get this when every value of the board is filled, because we don't run
+    // anything on it
+    // If we get to this step, that means that no values fit, which means the
+    // current iteration of the board is wrong so return false and try the previous
+    // step again with a different value
+    return false;
+  }
+
+  private boolean checkConstraints(int row, int col, char c) {
     for (int i = 0; i < boardSize; i++) {
       // check row
       if (board[i][col] != '.' && board[i][col] == c)
@@ -80,6 +102,7 @@ public class SudokuSolver {
     try (BufferedReader br = new BufferedReader(new FileReader("sudoku.txt"))) {
       String line = br.readLine();
       int count = 1;
+
       while (line != null) {
         SudokuSolver sol = new SudokuSolver(line);
         sol.solve();
