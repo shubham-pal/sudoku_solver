@@ -12,7 +12,7 @@ public class SudokuSolver {
     // update board
     parseString(sudoku);
   }
-
+  //function for String Parsing
   private void parseString(String sudoku) {
     int temp = 0;
     for (int i = 0; i < boardSize; i++) {
@@ -88,7 +88,7 @@ public class SudokuSolver {
 
     return true;
   }
-
+  //function for display board
   public void printBoard() {
     for (int i = 0; i < boardSize; i++) {
       for (int j = 0; j < boardSize; j++) {
