@@ -6,13 +6,13 @@ public class SudokuSolver {
 
   public SudokuSolver(String sudoku) {
     // get length for board
-    boardSize = (int) Math.sqrt(sudoku.length());
+    boardSize = (int)Math.sqrt(sudoku.length());
     board = new char[boardSize][boardSize];
 
     // update board
     parseString(sudoku);
   }
-
+  // function for String Parsing
   private void parseString(String sudoku) {
     int temp = 0;
     for (int i = 0; i < boardSize; i++) {
@@ -23,13 +23,11 @@ public class SudokuSolver {
     }
   }
 
-  public void solve() {
-    solver(0, 0);
-  }
+  public void solve() { solver(0, 0); }
 
   private boolean solver(int row, int col) {
-    // If the col is 9, that means you've filled out a whole row. Start the search
-    // on the next row by resetting column and incrementing the row by 1
+    // If the col is 9, that means you've filled out a whole row. Start the
+    // search on the next row by resetting column and incrementing the row by 1
     if (col == boardSize) {
       col = 0;
       row += 1;
@@ -52,8 +50,9 @@ public class SudokuSolver {
 
         // call for next
         boolean solved = solver(row, col + 1);
-        // The only way we can trigger a true is if we got to the end, so if it's true
-        // that means we have a solved board so you just keep returning
+        // The only way we can trigger a true is if we got to the end, so if
+        // it's true that means we have a solved board so you just keep
+        // returning
         if (solved)
           return true;
         // If our board isn't solved, backtrack and try the next number
@@ -64,8 +63,8 @@ public class SudokuSolver {
     // we get this when every value of the board is filled, because we don't run
     // anything on it
     // If we get to this step, that means that no values fit, which means the
-    // current iteration of the board is wrong so return false and try the previous
-    // step again with a different value
+    // current iteration of the board is wrong so return false and try the
+    // previous step again with a different value
     return false;
   }
 
@@ -80,15 +79,17 @@ public class SudokuSolver {
         return false;
 
       // check sqrt(boardSize) * sqrt(boardSize) block
-      int block = (int) Math.sqrt(boardSize);
-      if (board[block * (row / block) + i / block][block * (col / block) + i % block] != '.'
-          && board[block * (row / block) + i / block][block * (col / block) + i % block] == c)
+      int block = (int)Math.sqrt(boardSize);
+      if (board[block * (row / block) + i / block]
+               [block * (col / block) + i % block] != '.' &&
+          board[block * (row / block) + i / block]
+               [block * (col / block) + i % block] == c)
         return false;
     }
 
     return true;
   }
-
+  // function for display board
   public void printBoard() {
     for (int i = 0; i < boardSize; i++) {
       for (int j = 0; j < boardSize; j++) {
