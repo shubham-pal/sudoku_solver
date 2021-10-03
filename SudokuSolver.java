@@ -70,14 +70,7 @@ public class SudokuSolver {
 
   private boolean checkConstraints(int row, int col, char c) {
     for (int i = 0; i < boardSize; i++) {
-      // check row
-      if (board[i][col] != '.' && board[i][col] == c)
-        return false;
-
-      // check column
-      if (board[row][i] != '.' && board[row][i] == c)
-        return false;
-
+      
       // check sqrt(boardSize) * sqrt(boardSize) block
       int block = (int)Math.sqrt(boardSize);
       if (board[block * (row / block) + i / block]
@@ -85,6 +78,15 @@ public class SudokuSolver {
           board[block * (row / block) + i / block]
                [block * (col / block) + i % block] == c)
         return false;
+      
+      // check column
+      if (board[row][i] != '.' && board[row][i] == c)
+        return false;
+      
+      // check row
+      if (board[i][col] != '.' && board[i][col] == c)
+        return false;
+
     }
 
     return true;
